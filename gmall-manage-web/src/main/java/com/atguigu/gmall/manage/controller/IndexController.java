@@ -17,9 +17,6 @@ public class IndexController {
         return  "index";
     }
 
-    @RequestMapping("a")
-    public String a(){
-        return  "a";
-    }
+
 
 }
