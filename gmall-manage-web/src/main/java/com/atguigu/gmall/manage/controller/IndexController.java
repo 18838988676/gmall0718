@@ -17,6 +17,10 @@ public class IndexController {
         return  "index";
     }
 
+    @RequestMapping("spuListPage")
+    public String spuListPage(){
+        return  "spuListPage";
+    }
 
 
 }

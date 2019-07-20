@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-/**
+/**             商品表
  * @param
  * @return
  */

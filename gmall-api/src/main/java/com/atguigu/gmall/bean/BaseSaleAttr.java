@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * @param
+ * @param 基本销售属性表
  * @return
  */
 public class BaseSaleAttr implements Serializable {

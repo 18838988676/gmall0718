@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @param
+ * @param 属性表
  * @return
  */
 public class BaseAttrInfo implements Serializable {
