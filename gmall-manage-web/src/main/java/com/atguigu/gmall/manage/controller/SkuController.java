@@ -18,7 +18,7 @@ public class SkuController {
     @RequestMapping("saveSku")
     @ResponseBody
     public String saveSku(SkuInfo skuInfo){
-        System.out.println(skuInfo);
+        skuService.saveSku(skuInfo);
         return  "success";
     }
 
