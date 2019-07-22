@@ -9,6 +9,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 public class GmallUserApplication {
 
     public static void main(String[] args) {
+
+        System.out.println("cesdf");
         SpringApplication.run(GmallUserApplication.class, args);
     }
 
