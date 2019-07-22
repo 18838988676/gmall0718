@@ -14,11 +14,20 @@ public class AttrController {
     @Reference
     AttrService attrService;
 
+
+//获得平台属性初始化值吧
+    @RequestMapping("getAttrListByCtg3Id")
+    @ResponseBody
+    public List<BaseAttrInfo>  getAttrListByCtg3Id(String catalog3Id){
+        List<BaseAttrInfo>  ses=   attrService.getAttrListByCtg3Id(catalog3Id);
+        return ses;
+
+    }
+
     @RequestMapping("saveAttr")
     @ResponseBody
     public String saveAttr(BaseAttrInfo baseAttrInfo){
         attrService.saveAttr(baseAttrInfo);
-
         return "success";
 
     }
