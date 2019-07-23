@@ -5,6 +5,7 @@ import com.atguigu.gmall.bean.SpuSaleAttr;
 import com.atguigu.gmall.bean.UserInfo;
 import com.atguigu.gmall.service.SkuService;
 import com.atguigu.gmall.service.SpuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +19,16 @@ import java.util.Map;
 @Controller
 public class ItemController {
 
+    @Autowired
+    SkuService skuService;
+
+    @Autowired
+    SpuService spuService;
 
     @RequestMapping("{skuId}.html")
     public String item(@PathVariable String skuId, ModelMap map){
-
+        SkuInfo skuInfo=skuService.getSkuById(skuId);
+      map.put("skuInfo",skuInfo);
         return "item";
     }
 
