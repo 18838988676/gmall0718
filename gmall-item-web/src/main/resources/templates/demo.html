@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <!-- 取值 -->
+    <div th:text="${hello}" >默认内容</div>
+
+    <!-- 循环 -->
+    <div th:each="users:${userInfos}" >
+        <div th:text="${users.nickName}"></div> <div th:text="${users.phoneNum}"></div>
+    </div>
+
+    <!-- 判断 -->
+    <div th:if="${hello=='hello thymeleaf'}" >判断结果显示</div>
+
+    <div th:text="(${hello=='hello'})?'yes':'no'" >判断结果显示</div>
+    <!-- 引入 -->
+    <div th:include="test::inner"></div>
+
+    <!-- js函数调用 -->
+    <a th:href="'javascript:a(\''+${hello}+'\')'">点我看美女</a>
+
+    <script language="JavaScript">
+        function a(hello) {
+            alert(hello+"美女");
+        }
+    </script>
+</body>
+</html>
