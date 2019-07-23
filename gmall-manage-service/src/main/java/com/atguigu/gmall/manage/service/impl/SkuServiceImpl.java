@@ -33,6 +33,7 @@ public class SkuServiceImpl implements SkuService {
 
     @Autowired
     RedisUtil redisUtil;
+
     @Override
     public List<SkuInfo> getSkuListBySpu(String spuId) {
         SkuInfo skuInfo=new SkuInfo();

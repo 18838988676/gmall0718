@@ -1,5 +1,6 @@
 package com.atguigu.gmall.item.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall.bean.SkuInfo;
 import com.atguigu.gmall.bean.SpuSaleAttr;
 import com.atguigu.gmall.bean.UserInfo;
@@ -19,11 +20,14 @@ import java.util.Map;
 @Controller
 public class ItemController {
 
-    @Autowired
+
+    //当初这个写成@Autowiredl  org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.atguigu.gmall.service.SkuService' available: expected at le
+    @Reference
     SkuService skuService;
 
-    @Autowired
+    @Reference
     SpuService spuService;
+
 
     @RequestMapping("{skuId}.html")
     public String item(@PathVariable String skuId, ModelMap map){
