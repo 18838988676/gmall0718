@@ -1,15 +1,13 @@
-package com.atguigu.gmall.manage;
+package com.atguigu.gmall.item;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GmallManageWebApplication {
+public class GmallItemWebApplication {
 
     public static void main(String[] args) {
-
-        System.out.println("123213");
-        SpringApplication.run(GmallManageWebApplication.class, args);
+        SpringApplication.run(GmallItemWebApplication.class, args);
     }
 
 }
