@@ -1,12 +1,13 @@
 package com.atguigu.gmall.item.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.bean.SkuInfo;
+import com.atguigu.gmall.bean.SkuSaleAttrValue;
 import com.atguigu.gmall.bean.SpuSaleAttr;
 import com.atguigu.gmall.bean.UserInfo;
 import com.atguigu.gmall.service.SkuService;
 import com.atguigu.gmall.service.SpuService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,38 @@ public class ItemController {
     @RequestMapping("{skuId}.html")
     public String item(@PathVariable String skuId, ModelMap map){
         SkuInfo skuInfo=skuService.getSkuById(skuId);
-      map.put("skuInfo",skuInfo);
+        map.put("skuInfo",skuInfo);
+        String spuId = skuInfo.getSpuId();
+
+//        // 当前sku所包含的销售属性
+//        List<SkuSaleAttrValue> skuSaleAttrValueList = skuInfo.getSkuSaleAttrValueList();
+//
+//        // spu的销售属性列表
+//        List<SpuSaleAttr> saleAttrListBySpuId = spuService.getSaleAttrListBySpuId(spuId);
+
+        // spu的sku和销售属性对应关系的hash表
+        List<SkuInfo> infos = spuService.getSkuSaleAttrValueListBySpu(spuId);
+        HashMap<String, String> stringStringHashMap1 = new HashMap<>();
+        for (SkuInfo info : infos) {
+            String v = info.getId();
+
+            List<SkuSaleAttrValue> skuSaleAttrValueList = info.getSkuSaleAttrValueList();
+            String k = "";
+            for (SkuSaleAttrValue skuSaleAttrValue : skuSaleAttrValueList) {
+                k = k + "|" + skuSaleAttrValue.getSaleAttrValueId();
+            }
+            stringStringHashMap1.put(k,v);
+        }
+        String skuJson = JSON.toJSONString(stringStringHashMap1);
+        map.put("skuJson",skuJson);
+
+
+        Map<String, String> stringStringHashMap = new HashMap<>();
+        stringStringHashMap.put("spuId",spuId);
+        stringStringHashMap.put("skuId",skuId);
+//       用来确定商品有哪些属性 如颜色 版本等 以及默认选中状态
+        List<SpuSaleAttr> saleAttrListBySpuId = spuService.getSpuSaleAttrListCheckBySku(stringStringHashMap);
+        map.put("spuSaleAttrListCheckBySku",saleAttrListBySpuId);
         return "item";
     }
 

@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css"/>
 	</head>
 	<body>
+	<input id="skuJson" type="text" th:value="${skuJson}"/>
 		<div id="max">
 		<header>
 
@@ -306,7 +307,7 @@
 							<li>
 								<a href="##"><img src="/img/5a0afeddNb34732af.jpg" /></a>
 								<p>
-									<a href="##">OPPO R11s Plus 双卡双待全面屏拍照手机香槟色 全网通(6G RAM+64G ROM)标配</a>
+									<a href="##"><div th:text="${skuInfo?.skuDesc}">  OPPO R11s Plus 双卡双待全面屏拍照手机香槟色 全网通(6G RAM+64G ROM)标配</div></a>
 								</p>
 								<p><strong class="J-p-20015341974">￥3699.00</strong></p>
 							</li>
@@ -1019,38 +1020,30 @@
             $("#itemForm").submit();
         }
 
-        function switchSkuId() {
-            // 被选中属性
-            var checkDivs = $(".redborder div");
-            var valueIds="";
-            // 拼接成属性值串
-            for (var i = 0; i < checkDivs.length; i++) {
-                var saleAttrValueDiv = checkDivs.eq(i);
-                if(i>0){
-                    valueIds= valueIds+"|";
-                }
-                valueIds=valueIds+saleAttrValueDiv.attr("value");
-            }
-            //页面上的hashjson
-            var valuesSku = $("#valuesSku").attr("value");
-            var valuesSkuJson=JSON.parse(valuesSku);
+		function switchSkuId() {
+			// 获得被选中的销售属性值id
+			// 将销售属性值id拼接成key
+			var key = "";
+			$(".redborder").each(function(i,redborder){
+				var attrValueId = $(redborder).children().attr("value");
+				key = key + "|" + attrValueId;
+			});
 
-            // 看看hash有没有
-            var skuId= valuesSkuJson[valueIds];
-            // 当前sku
-            var skuIdSelf=$("#skuId").val();
+			// 获得hash表的json对象
+			var skuJsonStr = $("#skuJson").val();
 
-            // 判断是否跳转
-            if(skuId){
-                if(skuId==skuIdSelf){
-                    $("#cartBtn").attr("class","box-btns-two");
-                }else{
-                    window.location.href="/"+skuId+".html";
-                }
-            }else{
-                $("#cartBtn").attr("class","box-btns-two-off");
-            }
-        }
+			var skuJson = JSON.parse(skuJsonStr);
+
+			// 对比key，查看是否存在skuId
+
+			var skuId = skuJson[key];
+			if(skuId){
+				window.location.href = "/"+skuId+".html";
+			}else{
+				$("#cartBtn").attr("class","box-btns-two-off");
+				$("#cartBtn").disable();
+			}
+		}
 	</script>
 
 </html>

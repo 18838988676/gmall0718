@@ -7,6 +7,7 @@ import com.atguigu.gmall.service.SpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -90,5 +91,16 @@ public class SpuServiceImpl implements SpuService {
         SpuImage spuImage = new SpuImage();
         spuImage.setSpuId(spuId);
         return spuImageMapper.select(spuImage);
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Map<String, String> stringStringHashMap) {
+        return spuSaleAttrValueMapper.selectSpuSaleAttrListCheckBySku(stringStringHashMap);
+    }
+
+    @Override
+    public List<SkuInfo> getSkuSaleAttrValueListBySpu(String spuId) {
+
+        return spuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
     }
 }
