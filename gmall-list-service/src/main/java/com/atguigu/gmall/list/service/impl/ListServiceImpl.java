@@ -14,6 +14,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TermsQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -93,6 +94,10 @@ public class ListServiceImpl implements ListService {
         dsl.size(100);
         dsl.from(0);
 
+        HighlightBuilder highlightBuilder=new HighlightBuilder();
+        highlightBuilder.field("skuName");
+        dsl.highlight(highlightBuilder);
+        System.out.println("ces ");
         System.out.println(dsl.toString());
         return dsl.toString();
     }
