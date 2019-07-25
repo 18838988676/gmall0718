@@ -1,9 +1,11 @@
 package com.atguigu.gmall.list.controller;
 
+
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.service.AttrService;
 import com.atguigu.gmall.service.ListService;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,14 +17,13 @@ import java.util.*;
 public class ListController {
 
     @Reference
-    com.atguigu.gmall.service.ListService ListService;
+    ListService ListService;
     @Reference
     AttrService attrService;
 
-
-
     @RequestMapping("list.html")
     public String search(SkuLsParam skuLsParam, ModelMap map) {
+
         List<SkuLsInfo> skuLsInfo;
         skuLsInfo = ListService.search(skuLsParam);
 
@@ -110,7 +111,6 @@ public class ListController {
         return urlParam;
     }
 
-
     /***
      * 制作普通url
      * @param skuLsParam
@@ -179,11 +179,8 @@ public class ListController {
         return baseAttrInfos;
     }
 
-
     @RequestMapping("index")
-    public String index(){
-
+    public String index() {
         return "index";
     }
-
 }
