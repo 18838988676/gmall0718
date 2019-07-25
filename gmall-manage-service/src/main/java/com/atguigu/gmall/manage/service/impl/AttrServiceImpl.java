@@ -6,9 +6,11 @@ import com.atguigu.gmall.bean.BaseAttrValue;
 import com.atguigu.gmall.manage.mapper.BaseAttrInfoMapper;
 import com.atguigu.gmall.manage.mapper.BaseAttrValueMapper;
 import com.atguigu.gmall.service.AttrService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AttrServiceImpl implements AttrService {
@@ -52,5 +54,14 @@ public class AttrServiceImpl implements AttrService {
 
         return select;
 
+    }
+
+    @Override
+    public List<BaseAttrInfo> getAttrListByValueIds(Set<String> valueIds) {
+        String join = StringUtils.join(valueIds, ",");
+
+        List<BaseAttrInfo> baseAttrInfos = baseAttrValueMapper.selectAttrListByValueIds(join);
+
+        return baseAttrInfos;
     }
 }

@@ -91,4 +91,9 @@ public class SkuLsInfo implements Serializable {
     public void setSkuAttrValueList(List<SkuLsAttrValue> skuAttrValueList) {
         this.skuAttrValueList = skuAttrValueList;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

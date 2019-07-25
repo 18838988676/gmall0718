@@ -1,0 +1,40 @@
+es创建时的模板
+PUT gmall0328
+{
+  "mappings":{
+    "SkuLsInfo":{
+    "properties":{
+      "id":{
+        "type":"keyword",
+        "index": false
+      },
+      "price":{
+        "type": "double"
+      },
+      "skuName":{
+        "type": "text"
+        ,"analyzer": "ik_max_word"
+      },
+      "catalog3Id":{
+        "type": "keyword"
+      },
+      "skuDefaulting":{
+        "type": "keyword",
+        "index": false
+      },
+      "hostScore":{
+        "type": "long"
+      },
+      "skuAttrValueList":{
+        "properties": {
+          "valueId":{
+            "type":"keyword"
+          }
+        }
+      }
+
+    }
+    }
+  }
+
+}
