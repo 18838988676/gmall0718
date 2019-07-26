@@ -2,6 +2,7 @@ package com.atguigu.gmall.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
+import com.atguigu.gmall.annotation.LoginRequire;
 import com.atguigu.gmall.bean.CartInfo;
 import com.atguigu.gmall.bean.SkuInfo;
 import com.atguigu.gmall.service.CartService;
@@ -27,6 +28,18 @@ public class CartController {
 
     @Reference
     CartService cartService;
+
+
+
+
+    @LoginRequire(ifNeedSuccess=true)
+    @RequestMapping("toTrade")
+    public String toTrade(){
+
+        return "toTrade";
+    }
+
+
     private BigDecimal getTotalPrice(List<CartInfo> cartInfos) {
         BigDecimal b = new BigDecimal("0");
         for (CartInfo cartInfo : cartInfos) {
@@ -40,12 +53,13 @@ public class CartController {
     }
 
     //下面是用户为的呢
+    @LoginRequire(ifNeedSuccess = false)
     @RequestMapping("cartList")
     private String cartList(HttpServletRequest request , ModelMap map) {
         List<CartInfo> cartInfos = new ArrayList<>();
 
-        String userId = "2";
-//        String userId = "";
+//        String userId = "2";
+        String userId = "";
         if(StringUtils.isBlank(userId)){
             // 取cookie中的数据
             String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
@@ -61,13 +75,13 @@ public class CartController {
         map.put("totalPrice",getTotalPrice(cartInfos));
         return "cartList";
     }
-
+    @LoginRequire(ifNeedSuccess = false)
     @RequestMapping("checkCart")
     private String checkCart(HttpServletRequest request,HttpServletResponse response,CartInfo cartInfo , ModelMap map) {
-
-
         List<CartInfo> cartInfos = new ArrayList<>();
-        String userId = "2";
+//        String userId = "2";
+
+        String userId = "";
         // 修改购物车的选中状态
         // 更新数据后将最新数据查询出来
         if(StringUtils.isBlank(userId)){
@@ -96,7 +110,7 @@ public class CartController {
 
 
 
-
+    @LoginRequire(ifNeedSuccess = false)
     @RequestMapping("addToCart")
     public String addToCart(HttpServletRequest request, HttpServletResponse response, CartInfo cartInfo){
         String id = cartInfo.getSkuId();
@@ -108,8 +122,8 @@ public class CartController {
         cartInfo.setSkuPrice(sku.getPrice());
         cartInfo.setSkuName(sku.getSkuName());
 
-        String userId = "2";
-      //  String userId = "";
+//        String userId = "2";
+        String userId = "";
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isBlank(userId)){
             // 用户未登陆，添加cookie
@@ -162,6 +176,8 @@ public class CartController {
 
         return "redirect:/cartSuccess";
     }
+
+    @LoginRequire(ifNeedSuccess = false)
     @RequestMapping("cartSuccess")
     public String cartSuccess(){
 
