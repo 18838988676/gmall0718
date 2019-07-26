@@ -44,8 +44,8 @@ public class CartController {
     private String cartList(HttpServletRequest request , ModelMap map) {
         List<CartInfo> cartInfos = new ArrayList<>();
 
-        //String userId = "2";
-        String userId = "";
+        String userId = "2";
+//        String userId = "";
         if(StringUtils.isBlank(userId)){
             // 取cookie中的数据
             String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
@@ -61,29 +61,41 @@ public class CartController {
         map.put("totalPrice",getTotalPrice(cartInfos));
         return "cartList";
     }
-    @RequestMapping("checkCart")
-    private String checkCart(HttpServletRequest request , ModelMap map) {
 
-        // 修改购物车的选中状态
+    @RequestMapping("checkCart")
+    private String checkCart(HttpServletRequest request,HttpServletResponse response,CartInfo cartInfo , ModelMap map) {
+
 
         List<CartInfo> cartInfos = new ArrayList<>();
-//        String userId = "2";
-        String userId = "";
+        String userId = "2";
+        // 修改购物车的选中状态
+        // 更新数据后将最新数据查询出来
         if(StringUtils.isBlank(userId)){
-            // 取cookie中的数据
+            // 更新cookie
             String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
             if(StringUtils.isNotBlank(cartListCookie)){
                 cartInfos = JSON.parseArray(cartListCookie,CartInfo.class);
+                for (CartInfo info : cartInfos) {
+                    if(info.getSkuId().equals(cartInfo.getSkuId())){
+                        info.setIsChecked(cartInfo.getIsChecked());
+                    }
+                }
             }
+            CookieUtil.setCookie(request,response,"cartListCookie",JSON.toJSONString(cartInfos),60*60*24*7,true);
         }else{
-            // 去缓存数据
+            // 更新db和缓存
+            cartInfo.setUserId(userId);
+            cartService.updateCartChecked(cartInfo);
             cartInfos = cartService.getCartCache(userId);
         }
 
         map.put("cartList",cartInfos);
-
+        map.put("totalPrice",getTotalPrice(cartInfos));
         return "cartListInner";
     }
+
+
+
 
     @RequestMapping("addToCart")
     public String addToCart(HttpServletRequest request, HttpServletResponse response, CartInfo cartInfo){
@@ -96,8 +108,8 @@ public class CartController {
         cartInfo.setSkuPrice(sku.getPrice());
         cartInfo.setSkuName(sku.getSkuName());
 
-//        String userId = "2";
-        String userId = "";
+        String userId = "2";
+      //  String userId = "";
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isBlank(userId)){
             // 用户未登陆，添加cookie

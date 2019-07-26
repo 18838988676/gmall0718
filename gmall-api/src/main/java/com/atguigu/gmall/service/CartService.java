@@ -14,4 +14,6 @@ public interface CartService {
     void syncCache(String userId);
 
     List<CartInfo> getCartCache(String userId);
+
+    void updateCartChecked(CartInfo cartInfo);
 }

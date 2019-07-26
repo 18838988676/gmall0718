@@ -8,6 +8,7 @@ import com.atguigu.gmall.service.CartService;
 import com.atguigu.gmall.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,6 +78,18 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    @Override
+    public void updateCartChecked(CartInfo cartInfo) {
+
+        // update table set a = 1 , b = 2 where id = ? and id2 = ?
+
+        Example e = new Example(CartInfo.class);
+        e.createCriteria().andEqualTo("skuId",cartInfo.getSkuId()).andEqualTo("userId",cartInfo.getUserId());
+
+        cartInfoMapper.updateByExampleSelective(cartInfo,e);
+
+        syncCache(cartInfo.getUserId());
+    }
 
 
 }
