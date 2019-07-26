@@ -43,11 +43,11 @@
 					<li class="top_1">
 						<img src="/img/user_03.png" class="err_img1"/>
 
-						<input type="text" name="loginName" placeholder=" 邮箱/用户名/已验证手机"  class="user"/>
+						<input type="text"  id="loginName" name="loginName" placeholder=" 邮箱/用户名/已验证手机"  class="user"/>
 					</li>
 					<li>
 						<img src="/img/user_06.png" class="err_img2"/>
-						<input type="password" name="passwd" placeholder=" 密码" class="password"/>
+						<input type="password" id="passwd" name="passwd" placeholder=" 密码" class="password"/>
 
 					</li>
 					<li class="bri">
@@ -77,10 +77,18 @@
 <script language="JavaScript">
 
 	function submitLogin() {
-		$.post("/login",{},function(token){
-			// 重定向会原来的请求地址，携带着颁发的token
-			alert($("#returnURL").val());
-			window.location.href = $("#returnURL").val()+"?newToken="+token;
+		var loginName = $("#loginName").val();
+		var passwd = $("#passwd").val();
+		$.post("/login",{loginName:loginName,passwd:passwd},function(token){
+
+			if(token=="username or password err"){
+				return ;
+			}else{
+				// 重定向会原来的请求地址，携带着颁发的token
+				alert($("#returnURL").val()+"?newToken="+token);
+
+				window.location.href = $("#returnURL").val()+"?newToken="+token;
+			}
 		})
 	}
 

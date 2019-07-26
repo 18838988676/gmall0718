@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,5 +92,45 @@ public class CartServiceImpl implements CartService {
         syncCache(cartInfo.getUserId());
     }
 
+    @Override
+    public void combineCart(List<CartInfo> cartInfos, String userId) {
+        if(cartInfos!=null){
+            for (CartInfo cartInfo : cartInfos) {
+                CartInfo info =  ifCartExists(cartInfo);
 
+                if(info==null){
+                    // 插入
+                    cartInfo.setUserId(userId);
+                    cartInfoMapper.insertSelective(cartInfo);
+                }else{
+                    // 更新
+                    info.setSkuNum(cartInfo.getSkuNum()+info.getSkuNum());
+                    info.setCartPrice(info.getSkuPrice().multiply(new BigDecimal(info.getSkuNum())));
+                    cartInfoMapper.updateByPrimaryKeySelective(info);
+                }
+            }
+        }
+        // 同步缓存
+        syncCache(userId);
+    }
+
+    public List<CartInfo> getCartCacheByChecked(String userId) {
+
+        List<CartInfo> cartInfos = new ArrayList<>();
+        Jedis jedis = redisUtil.getJedis();
+
+        List<String> hvals = jedis.hvals("carts:" + userId + ":info");
+
+        if(hvals != null&&hvals.size()>0){
+            for (String hval : hvals) {
+                CartInfo cartInfo = JSON.parseObject(hval, CartInfo.class);
+                if(cartInfo.getIsChecked().equals("1")){
+                    cartInfos.add(cartInfo);
+                }
+            }
+        }
+
+
+        return cartInfos;
+    }
 }

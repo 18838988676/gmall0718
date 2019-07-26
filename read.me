@@ -1,19 +1,16 @@
 #gmall0328
 
- gmall-mange
- 8071
- 8081
- gmall-item
- 8072
- 8082
- gmall-list/seach
- 8073
- 8083
- gmall-cart
- 8074
- 8084
- gmall-passport(user)
- 8075
- 8085
+ gmall-manage-web/service  8071 8081 需要登录 商品后台管理
+ gmall-item-web/service 8072 8082 需要登录 商品详情
+ gmall-list-web/service 8073 8083 需要登录 前端大首页 以及首页搜索后的大搜索列表列表页
+ gmall-cart-web/service 8074 8084 需要登录 加入购物车 浏览购物车 用户登录与否的购物车信息存放位置 与 更新。可跳转到结算。进行结算时 需要登录 并有sso拦截了。
+ gmall-passport(user) 8075  8085  需要启动 SSO单点登录系统：拦截用户的关于购物车结算请求  过滤用户登录 验证token判断用户是否登录 没有登录的话 跳转到登录页面 注册并赋予token后 进入登录页面
+gmall-user(service)  8070/  gmall-user-web 8080       需要启动  与用户相关的功能等   如 登录之类的。   gmall-user(service)  需要redis。此启动类位置：package com.atguigu.gmall;redis类位置：package com.atguigu.gmall.util;
+而且 有时 gmall-user(service)  8070/  需要提供redis配置
+
+注意：启动类 放在哪个包才能扫描本模块需要的工具的路径 要注意！！！  比如：
+
 gmall-order
 gmall-payment
+
+

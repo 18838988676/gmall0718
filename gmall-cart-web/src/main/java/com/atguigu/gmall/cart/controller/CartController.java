@@ -59,7 +59,7 @@ public class CartController {
         List<CartInfo> cartInfos = new ArrayList<>();
 
 //        String userId = "2";
-        String userId = "";
+        String userId = (String)request.getAttribute("userId");
         if(StringUtils.isBlank(userId)){
             // 取cookie中的数据
             String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
@@ -81,7 +81,7 @@ public class CartController {
         List<CartInfo> cartInfos = new ArrayList<>();
 //        String userId = "2";
 
-        String userId = "";
+        String userId = (String)request.getAttribute("userId");
         // 修改购物车的选中状态
         // 更新数据后将最新数据查询出来
         if(StringUtils.isBlank(userId)){
@@ -123,7 +123,7 @@ public class CartController {
         cartInfo.setSkuName(sku.getSkuName());
 
 //        String userId = "2";
-        String userId = "";
+        String userId = (String)request.getAttribute("userId");
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isBlank(userId)){
             // 用户未登陆，添加cookie
