@@ -57,6 +57,12 @@ public class OrderServiceImpl implements OrderService {
         orderInfo1.setId(orderId);
         OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(orderInfo1);
 
+
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(orderId);
+        List<OrderDetail> select = orderDetailMapper.select(orderDetail);
+
+        orderInfo.setOrderDetailList(select);
         return orderInfo;
     }
 
