@@ -32,12 +32,6 @@ public class CartController {
 
 
 
-   /* @LoginRequire(ifNeedSuccess=true)
-    @RequestMapping("toTrade")
-    public String toTrade(){
-
-        return "toTrade";
-    }*/
 
 
     private BigDecimal getTotalPrice(List<CartInfo> cartInfos) {

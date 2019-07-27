@@ -77,6 +77,8 @@
 <script language="JavaScript">
 
 	function submitLogin() {
+		alert($("#returnURL").val())
+		alert(3)
 		var loginName = $("#loginName").val();
 		var passwd = $("#passwd").val();
 		$.post("/login",{loginName:loginName,passwd:passwd},function(token){
@@ -86,8 +88,8 @@
 			}else{
 				// 重定向会原来的请求地址，携带着颁发的token
 				alert($("#returnURL").val()+"?newToken="+token);
-
-				window.location.href = $("#returnURL").val()+"?newToken="+token;
+				var returnURLToken=$("#returnURL").val()+"?newToken="+token;
+				window.location.href = returnURLToken;
 			}
 		})
 	}

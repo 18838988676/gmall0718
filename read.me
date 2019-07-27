@@ -7,7 +7,7 @@
  gmall-passport(user) 8075  8085  需要启动 SSO单点登录系统：拦截用户的关于购物车结算请求  过滤用户登录 验证token判断用户是否登录 没有登录的话 跳转到登录页面 注册并赋予token后 进入登录页面
 gmall-user(service)  8070/  gmall-user-web 8080       需要启动  与用户相关的功能等   如 登录之类的。   gmall-user(service)  需要redis。此启动类位置：package com.atguigu.gmall;redis类位置：package com.atguigu.gmall.util;
 gmall-order 8086  需要登录 结算页；
-gmall-payment
+gmall-payment 8087 支付系统
 
 
 
@@ -16,5 +16,13 @@ gmall-payment
 
 注意：启动类 放在哪个包才能扫描本模块需要的工具的路径 要注意！！！  比如：
 
+需要开启 tomcat --> dubbo ---》zookeeper   和  redis
 
+测试：首先清空cookie中localhost账号，和redis缓存；
+1：查看具体商品详情(http://localhost:8082/88.html)  启动：gmall-item-web需要SkuService SpuService提供服务 ====  》启动 gmall-manage-service
+2:并加入购物车  启动：   gmall-cart-service 和 gmall-cart-web
+3:点击去购物车结算，启动gmall-order-service和gmall-order-web
+（点击去结算  启动：gmall-user 和 gmall-passport-web 权限验证 拦截）
+5：启动：gmall- payment 8087 支付宝
+对 跳过来了
 

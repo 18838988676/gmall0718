@@ -44,20 +44,27 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void syncCache(String userId) {
+
         Jedis jedis = redisUtil.getJedis();
 
         CartInfo cartInfo = new CartInfo();
         cartInfo.setUserId(userId);
         List<CartInfo> select = cartInfoMapper.select(cartInfo);
 
-        HashMap<String, String> stringStringHashMap = new HashMap<>();
-        for (CartInfo info : select) {
-            stringStringHashMap.put(info.getId(), JSON.toJSONString(info));
+        if(select==null||select.size()==0){
+            jedis.del("carts:"+userId+":info");
+        }else{
+            HashMap<String, String> stringStringHashMap = new HashMap<>();
+            for (CartInfo info : select) {
+                stringStringHashMap.put(info.getId(), JSON.toJSONString(info));
+            }
+
+            jedis.hmset("carts:"+userId+":info",stringStringHashMap);
+
         }
 
-        jedis.hmset("carts:"+userId+":info",stringStringHashMap);
-
         jedis.close();
+
     }
 
     @Override
@@ -132,5 +139,15 @@ public class CartServiceImpl implements CartService {
 
 
         return cartInfos;
+    }
+
+    @Override
+    public void deleteCartById(List<CartInfo> cartInfos) {
+            // delete from cart_info where id in ()
+            for (CartInfo cartInfo : cartInfos) {
+                cartInfoMapper.deleteByPrimaryKey(cartInfo);
+            }
+            // 同步缓存
+            syncCache(cartInfos.get(0).getUserId());
     }
 }
