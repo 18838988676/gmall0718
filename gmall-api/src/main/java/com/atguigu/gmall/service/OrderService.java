@@ -10,4 +10,8 @@ public interface OrderService {
     String saveOrder(OrderInfo orderInfo);
 
     OrderInfo getOrderById(String orderId);
+
+    void updateOrderStatus(OrderInfo orderInfo);
+
+    void sendOrderResultQueue(String outTradeNo);
 }

@@ -25,8 +25,6 @@ import java.util.Map;
 @Controller
 public class PayController {
 
-
-
     @Reference
     OrderService orderService;
 
@@ -35,6 +33,7 @@ public class PayController {
 
     @Autowired
     PaymentService paymentService;
+
 
 
     @RequestMapping(value = "alipay/callback/return")
@@ -48,7 +47,6 @@ public class PayController {
             System.out.println("此处支付宝的签名验证通过。。。");
         }
 
-
         if(signVerified){
             // TODO 验签成功后，按照支付结果异步通知中的描述，对支付结果中的业务内容进行二次校验，校验成功后在response中返回success并继续商户自身业务处理，校验失败返回failure
             String tradeNo = request.getParameter("trade_no");
@@ -57,14 +55,14 @@ public class PayController {
 
             String callbackContent =request.getQueryString();
 
-            // 修改支付信息
-            PaymentInfo paymentInfo = new PaymentInfo();
-            paymentInfo.setPaymentStatus("已支付");
-            paymentInfo.setCallbackTime(new Date());
-            paymentInfo.setOutTradeNo(outTradeNo);
-            paymentInfo.setCallbackContent(callbackContent);
-            paymentInfo.setAlipayTradeNo(tradeNo);
-            paymentService.updatePayment(paymentInfo);
+
+            // 幂等性检擦
+            boolean b = paymentService.checkPaied(outTradeNo);
+            // 发送支付成功的消息PAYMENT_SUCCESS_QUEUE
+            if(!b){
+                paymentService.sendPaymentSuccessQueue(tradeNo,outTradeNo,callbackContent);
+            }
+
         }else{
             // TODO 验签失败则记录异常日志，并在response中返回failure.
             // 返回失败页面
@@ -74,7 +72,7 @@ public class PayController {
         return "testPaySuccess";
     }
 
-
+    //延迟队列的起点
     @RequestMapping("alipay/submit")
     @ResponseBody
     public String alipay(String orderId, ModelMap map){
@@ -112,7 +110,11 @@ public class PayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-
+        //打印出私钥       保证
+        System.out.println(form);
+        System.out.println("设置一个定时巡检订单"+paymentInfo.getOutTradeNo()+"的支付状态的延迟队列");
+     //设置延迟队列
+       paymentService.sendPaymentCheckQueue(paymentInfo.getOutTradeNo(),5);
         return form;
     }
 
@@ -133,6 +135,4 @@ public class PayController {
         map.put("totalAmount",orderInfo.getTotalAmount());
         return "index";
     }
-
-
 }
