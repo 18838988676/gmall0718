@@ -1,6 +1,7 @@
 package com.atguigu.gmall.order.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.bean.OrderDetail;
 import com.atguigu.gmall.bean.OrderInfo;
 import com.atguigu.gmall.config.ActiveMQUtil;
@@ -104,8 +105,19 @@ public class OrderServiceImpl implements OrderService {
             MessageProducer producer = session.createProducer(testqueue);
 
             TextMessage textMessage = new ActiveMQTextMessage();
-            textMessage.setText(outTradeNo);
-            // 延迟队列 并不在这里设置  textMessage.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,1000*60);
+
+            // 获得订单消息数据
+            OrderInfo orderInfo = new OrderInfo();
+            orderInfo.setOutTradeNo(outTradeNo);
+            orderInfo = orderInfoMapper.selectOne(orderInfo);
+
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId(orderInfo.getId());
+            List<OrderDetail> select = orderDetailMapper.select(orderDetail);
+            orderInfo.setOrderDetailList(select);
+            // 将消息数据转化为json字符串文本输出
+            textMessage.setText(JSON.toJSONString(orderInfo));
+            //textMessage.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,1000*60);
 
 
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);

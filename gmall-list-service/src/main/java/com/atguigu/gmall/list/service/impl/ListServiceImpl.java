@@ -41,9 +41,12 @@ public class ListServiceImpl implements ListService {
             for (SearchResult.Hit<SkuLsInfo, Void> hit : hits) {
                 SkuLsInfo source = hit.source;
               Map<String, List<String>> highlight = hit.highlight;
-                List<String> skuName = highlight.get("skuName");
-                String s = skuName.get(0);
-                source.setSkuName(s);
+              if(highlight!=null){
+
+                  List<String> skuName = highlight.get("skuName");
+                  String s = skuName.get(0);
+                  source.setSkuName(s);
+              }
                 skuLsInfos.add(source);
             }
         } catch (IOException e) {

@@ -32,7 +32,7 @@ public class ListController {
 
         String[] valueId = skuLsParam.getValueId();
         List<Crumb> crumbs = new ArrayList<>();// 面包屑
-        if (valueId != null && valueId.length > 0) {
+        if (valueId != null && valueId.length > 0 && baseAttrInfos!=null) {
             for (String s : valueId) {
                 Iterator<BaseAttrInfo> iterator = baseAttrInfos.iterator();
                 while (iterator.hasNext()) {

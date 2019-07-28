@@ -9,7 +9,7 @@ gmall-user(service)  8070/  gmall-user-web 8080       需要启动  与用户相
 gmall-order 8086  需要登录 结算页；
 gmall-payment 8087 支付系统
 
-
+9001
 
 
 而且 有时 gmall-user(service)  8070/  需要提供redis配置
@@ -30,3 +30,22 @@ gmall-payment 8087 支付系统
 为了完成支付后的功能，以后只启动gmall-payment 和 gmall-order-service2个服务。同时用户名在gmall-payment 写死 ；  访问支付页面为：
 从加入购物车 到扫码支付 ；可以直接简化为 http://localhost:8087/index?orderId=236（直接选择支付宝还是淘宝进行支付）  其中 orderId=order-info订单中的；每次测试 把这个表中的out_trade_no改下 就能重复
 扫码了
+
+//查询的时候  要加到es中 不然查不出来
+定时任务：quartz:  定时删除超时订单  order-info中 expire_time 过期时间和当前时间； https://blog.csdn.net/u012907049/article/details/73801122/  提交es
+分布式缓存、
+缓存击穿
+雪崩
+分布式session
+分布式事务、
+分布式发号器、
+分布式任务、
+分布式文件存储、
+分布式检测
+分布式mq
+分布式
+EIK 日志
+全链路压测
+限流降级
+项目架构演进和技术落地最终清单：
+jvm优化  tomcat优化 es优化 慢查询 mysql优化 mq优化  前端优化
