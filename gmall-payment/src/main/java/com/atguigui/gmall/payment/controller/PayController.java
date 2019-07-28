@@ -99,7 +99,7 @@ public class PayController {
         stringObjectHashMap.put("out_trade_no",order.getOutTradeNo());
         stringObjectHashMap.put("product_code","FAST_INSTANT_TRADE_PAY");
         stringObjectHashMap.put("total_amount",0.01);//orderById.getTotalAmount()
-        stringObjectHashMap.put("subject","测试硅谷手机phone");
+        stringObjectHashMap.put("subject","王明超之支付宝接口测试");
 
         String json = JSON.toJSONString(stringObjectHashMap);
         alipayRequest.setBizContent(json);
